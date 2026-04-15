@@ -1,0 +1,17 @@
+{
+  "name": "grafana-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot для алертів з Grafana",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode-terminal": "^0.12.0",
+    "dotenv": "^16.4.5"
+  }
+}
