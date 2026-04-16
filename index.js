@@ -23,6 +23,7 @@ if (!TARGET_PHONE) {
 const client = new Client({
   authStrategy: new LocalAuth({ clientId: "grafana-bot" }),
   puppeteer: {
+    executablePath: '/usr/bin/chromium-browser',
     headless: true,
     args: [
       "--no-sandbox",
