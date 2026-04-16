@@ -37,7 +37,7 @@ sudo apt-get install -y \
     chromium-browser \
     libgbm-dev \
     libxshmfence-dev \
-    libasound2 \
+    libasound2t64 \
     libatk-bridge2.0-0 \
     libgtk-3-0 \
     libnss3 \
@@ -72,6 +72,7 @@ cd /opt/grafana-whatsapp
 cp /шлях/до/index.js          /opt/grafana-whatsapp/
 cp /шлях/до/webhook_server.py /opt/grafana-whatsapp/
 cp /шлях/до/.env              /opt/grafana-whatsapp/
+cp /шлях/до/requirements.txt  /opt/grafana-whatsapp/
 ```
 
 ---
@@ -124,7 +125,7 @@ cd /opt/grafana-whatsapp
 python3 -m venv venv
 source venv/bin/activate
 
-pip install flask requests python-dotenv
+pip install -r requirements.txt
 ```
 
 ---
@@ -206,6 +207,8 @@ StandardError=journal
 [Install]
 WantedBy=multi-user.target
 ```
+
+> Також замість `YOUR_USER` встав своє ім'я користувача: `echo $USER`
 
 ### 7.3 Увімкнення сервісів
 
