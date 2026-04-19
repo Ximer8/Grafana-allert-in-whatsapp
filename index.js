@@ -20,26 +20,30 @@ if (!TARGET_PHONE) {
   console.warn("⚠️  TARGET_PHONE не вказано! Встанови в .env або передай при запуску.");
 }
 
-if (!TARGET_PHONE) {
+
+if (!TARGET_GROUP) {
   console.warn("⚠️  TARGET_GROUP не вказано! Встанови в .env або передай при запуску.");
 }
 
 // ─── WHATSAPP CLIENT ─────────────────────────────────────────────────────────
 const client = new Client({
+  authStrategy: new LocalAuth({ clientId: "grafana-bot" }),
   puppeteer: {
-    executablePath: '/usr/bin/chromium-brouser',
+    executablePath: '/usr/bin/chromium-browser',
     headless: true,
     args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--no-zygote',
-      '--single-process'
-    ]
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--disable-extensions",
+      "--single-process",         // допомагає на серверах з малою RAM
+    ],
   },
-  takeoverOnConflict: true,
-  takeoverTimeoutMs: 0
-})
+  // Таймаут на ініціалізацію (мс) — збільшено для повільних серверів
+  authTimeoutMs: 60000,
+  qrMaxRetries: 5,
+});
 
 let isReady     = false;
 let clientError = null;
