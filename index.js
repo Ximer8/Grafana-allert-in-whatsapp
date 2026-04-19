@@ -27,7 +27,7 @@ if (!TARGET_PHONE) {
 // ─── WHATSAPP CLIENT ─────────────────────────────────────────────────────────
 const client = new Client({
   puppeteer: {
-    executablePath: '/usr/bin/google-chrome',
+    executablePath: '/usr/bin/chromium-brouser',
     headless: true,
     args: [
       '--no-sandbox',
