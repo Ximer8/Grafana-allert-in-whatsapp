@@ -86,6 +86,7 @@ nano /opt/grafana-whatsapp/.env
 Встав свій номер телефону (одержувача алертів):
 ```env
 TARGET_PHONE=380671234567      # Твій номер БЕЗ + (міжнародний формат)
+TARGET_GROUP=123XXXXXXXXXXXXXX    # ID без @g.us твоєї группи
 BOT_PORT=5055
 WHATSAPP_BOT_URL=http://localhost:5055/send
 SECRET_TOKEN=                  # Залиш порожнім (або встав секрет)
