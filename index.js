@@ -13,31 +13,33 @@ try { require("dotenv").config(); } catch (_) {}
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const TARGET_PHONE = process.env.TARGET_PHONE || "";   // напр. 380671234567
+const TARGET_GROUP = (process.env.TARGET_GROUP || "").trim();  // напр. 120111422228333170
 const BOT_PORT     = parseInt(process.env.BOT_PORT) || 5055;
 
 if (!TARGET_PHONE) {
   console.warn("⚠️  TARGET_PHONE не вказано! Встанови в .env або передай при запуску.");
 }
 
+if (!TARGET_PHONE) {
+  console.warn("⚠️  TARGET_GROUP не вказано! Встанови в .env або передай при запуску.");
+}
+
 // ─── WHATSAPP CLIENT ─────────────────────────────────────────────────────────
 const client = new Client({
-  authStrategy: new LocalAuth({ clientId: "grafana-bot" }),
   puppeteer: {
-    executablePath: '/usr/bin/chromium-browser',
+    executablePath: '/usr/bin/google-chrome',
     headless: true,
     args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--disable-extensions",
-      "--single-process",         // допомагає на серверах з малою RAM
-    ],
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--no-zygote',
+      '--single-process'
+    ]
   },
-  // Таймаут на ініціалізацію (мс) — збільшено для повільних серверів
-  authTimeoutMs: 60000,
-  qrMaxRetries: 5,
-});
+  takeoverOnConflict: true,
+  takeoverTimeoutMs: 0
+})
 
 let isReady     = false;
 let clientError = null;
@@ -82,9 +84,18 @@ client.on("auth_failure", (msg) => {
 const messageQueue = [];
 
 async function sendWhatsApp(phone, text) {
-  const chatId = phone.includes("@c.us") ? phone : `${phone}@c.us`;
-  await client.sendMessage(chatId, text);
-  console.log(`📤 Надіслано → ${chatId}`);
+  // Відправка на телефон
+  if (phone) {
+    const chatId = phone.includes("@c.us") ? phone : `${phone}@c.us`;
+    await client.sendMessage(chatId, text);
+    console.log(`📤 Надіслано → ${chatId}`);
+  }
+  // Відправка в групу
+  if (TARGET_GROUP) {
+    const groupId = TARGET_GROUP.endsWith("@g.us") ? TARGET_GROUP : `${TARGET_GROUP}@g.us`;
+    await client.sendMessage(groupId, text);
+    console.log(`📤 Надіслано в групу → ${groupId}`);
+  }
 }
 
 async function flushQueue() {
